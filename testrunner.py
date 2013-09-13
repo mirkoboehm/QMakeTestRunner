@@ -21,6 +21,7 @@ import os
 import sys
 import subprocess
 import platform
+import re
 
 # First, parse the command line arguments, and generate help (-h) in the process:
 parser = argparse.ArgumentParser( prog = 'QMakeTestRunner',
@@ -36,6 +37,8 @@ parser.add_argument( '-v', '--verbose', dest = 'verbose', required = False, acti
                      help = 'Toggle extra debug output' )
 parser.add_argument( '-f', '--framework-path', dest = 'frameworkPaths', required = False, action = 'append', default = [],
                      help = 'Mac framework paths to be added to the executable run time environment' )
+parser.add_argument( '--custom-env', dest = 'customEnvs', required = False, action = 'append', default = [],
+                     help = 'Custom variables to be added to the executable run time environment' )
 parser.add_argument( 'testExecutable', metavar = 'test', nargs = '?', type = str,
                      help = 'Test executable to be started' )
 arguments, test_arguments = parser.parse_known_args()
@@ -49,6 +52,7 @@ def v_print( txt ):
 v_print( "Library directories:   {0}".format( ', '.join( arguments.libPaths ) or 'none' ) )
 v_print( "Framework paths:       {0}".format( ', '.join( arguments.frameworkPaths ) or 'none' ) )
 v_print( "Test executable:       {0}".format( arguments.testExecutable or 'not specified' ) )
+v_print( "Custom variables:      {0}".format( arguments.customEnvs or 'not specified' ) )
 v_print( "Verbose:               {0}".format( 'yes' if arguments.verbose else 'no' ) )
 v_print( "Test arguments:        {0}".format( ' '.join( test_arguments ) or 'none' ) )
 
@@ -78,6 +82,16 @@ framework_path_elements = filter( len, [] + arguments.frameworkPaths + original_
 new_framework_path = os.pathsep.join( framework_path_elements )
 v_print( 'Framework search path: {0}'.format( new_framework_path ) )
 if new_framework_path: os.environ[frameworkPathVariable] = new_framework_path
+
+# Process custom environment variables
+for env in arguments.customEnvs:
+    m = re.match("([a-zA-Z0-9_]+)=(.*)", env)
+    if m is not None:
+        variable = m.group(1)
+        value = m.group(2)
+        v_print( 'Custom variable: {0} {1}'.format(variable, value) )
+        os.environ[variable] = value
+
 
 # Run the test program and return with it's exit code:
 sys.exit( subprocess.call( [ arguments.testExecutable ] + test_arguments ) )
