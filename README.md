@@ -26,8 +26,7 @@ include( 3rdparty/QMakeTestRunner/testtarget.pri )
 
 To trigger extra diagnostic output of the test runner, add 
 
-<pre><code>TEST_VERBOSE = 1
-</code></pre>
+<pre><code>TEST_VERBOSE = 1</code></pre>
 
 before including _testtarget.pri_.
 
@@ -39,13 +38,13 @@ Once _testtarget.pri_ has been included, a _test_ target is defined in the makef
 
 Frameworks on OSX are a different kind of library. The framework path is passed in to the dynamic linker using a different environment variable. To specify a framework path, set the _TEST_FRAMEWORK_PATHS_ variable before including _testtarget.pri_.
 
-<pre><code>TEST_FRAMEWORK_PATHS +=  $$OUT_PWD/frameworks</pre></code>
+<pre><code>TEST_FRAMEWORK_PATHS +=  $$OUT_PWD/frameworks</code></pre>
 
 ### Custom environment
 
 Additional variables can be exported to the test environment. The following example adds variable _FOO_ with value _bar_ to the unit test environement.
 
-<pre><code>TEST_CUSTOM_ENV +=  VARIABLE=value</pre></code>
+<pre><code>TEST_CUSTOM_ENV +=  VARIABLE=value</code></pre>
 
 The following example shows how to export useful paths to reference files under the source and the build directory.
 
