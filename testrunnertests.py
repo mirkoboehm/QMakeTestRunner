@@ -79,5 +79,17 @@ class TestRunnerTests( unittest.TestCase ):
         except subprocess.CalledProcessError as e:
             self.fail( str( e ) )
 
+    def testCustomEnv( self ):
+        args = [sys.executable, 'testrunner.py', '--verbose',
+                '--custom-env', 'FOO=bar',
+                sys.executable, '-c', 'print("Test output"); import os; print(os.environ)']
+        try:
+            output = self._runTestRunner( args )
+            self.assertTrue( output.find( 'Test output' ) != -1 )
+            self.assertTrue( re.search( 'Custom variables:\s+\[\'FOO=bar\'\]', output ) )
+            self.assertTrue( re.search( '\'FOO\': \'bar\'', output) )
+        except subprocess.CalledProcessError as e:
+            self.fail( str( e ) )
+
 if __name__ == "__main__":
     unittest.main()

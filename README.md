@@ -41,6 +41,20 @@ Frameworks on OSX are a different kind of library. The framework path is passed 
 
 <pre><code>TEST_FRAMEWORK_PATHS +=  $$OUT_PWD/frameworks</pre></code>
 
+### Custom environment
+
+Additional variables can be exported to the test environment. The following example adds variable _FOO_ with value _bar_ to the unit test environement.
+
+<pre><code>TEST_CUSTOM_ENV +=  VARIABLE=value</pre></code>
+
+The following example shows how to export useful paths to reference files under the source and the build directory.
+
+<pre><code>TEST_CUSTOM_ENV += \\\"top_srcdir="$$top_srcdir"\\\"
+TEST_CUSTOM_ENV += \\\"top_builddir="$$top_builddir"\\\"
+</pre></code>
+
+Variables _top_srcdir_ and _top_builddir_ should be defined before being used. For more information, refer to [QMake top level srcdir and builddir](http://qt-project.org/wiki/QMake-top-level-srcdir-and-builddir).
+
 ###Setting up QMakeTestRunner as a Git submodule
 
 Using a Git submodule has the benefit that the code for the runner does not need to be duplicated into the repository of the project that is supposed to use it. It also makes it easy to pull updates to the test runner by simply updating the submodule to a new revision. To add the submodule as _3rdparty/QMakeTestRunner_ in your project, follow these steps:
